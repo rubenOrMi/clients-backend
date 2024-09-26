@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class UploadFileServiceImpl implements IUploadFileService{
+public class UploadFileServiceImpl implements IUploadFileService {
 
     private final static String DIRECTORY_UPLOAD = "uploads";
 
@@ -31,9 +31,9 @@ public class UploadFileServiceImpl implements IUploadFileService{
 
         recurso = new UrlResource(rutaArchivo.toUri());
 
-        if(recurso != null && !recurso.exists() && !recurso.isReadable()){
+        if (recurso != null && !recurso.exists() && !recurso.isReadable()) {
             rutaArchivo = Paths.get("src/main/resources/static/images").resolve("no-user.png").toAbsolutePath();
-            recurso = new UrlResource(rutaArchivo.toUri());            
+            recurso = new UrlResource(rutaArchivo.toUri());
             log.error("Error, no se pudo cargar la imagen " + nombreFoto);
         }
         return recurso;
@@ -41,12 +41,12 @@ public class UploadFileServiceImpl implements IUploadFileService{
 
     @Override
     public String guardarImagen(MultipartFile archivo) throws IOException {
-        
+
         String nombreArchivo = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename().replace(" ", "");
-        
+
         Path rutaArchivo = getPath(nombreArchivo);
         log.info(rutaArchivo.toString());
-        
+
         Files.copy(archivo.getInputStream(), rutaArchivo);
 
         return nombreArchivo;
@@ -54,10 +54,10 @@ public class UploadFileServiceImpl implements IUploadFileService{
 
     @Override
     public boolean eliminarImagen(String nombreFoto) {
-        if(nombreFoto != null && nombreFoto.length() > 0){
+        if (nombreFoto != null && nombreFoto.length() > 0) {
             Path rutaFotoAnterior = Paths.get("uploads").resolve(nombreFoto).toAbsolutePath();
             File archivoFotoAnterior = rutaFotoAnterior.toFile();
-            if(archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
+            if (archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()) {
                 archivoFotoAnterior.delete();
                 return true;
             }
